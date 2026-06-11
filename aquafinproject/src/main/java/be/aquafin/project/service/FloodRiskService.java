@@ -54,4 +54,18 @@ public class FloodRiskService {
 
         return calculateWinterRisk(latest.getWinterRain());
     }
+
+    public double predictNextWinterRainfall() {
+
+        List<RainfallData> data = rainfallDataRepository.findAll();
+
+        if (data.size() < 2) {
+            return 0;
+        }
+
+        RainfallData previous = data.get(data.size() - 2);
+        RainfallData latest = data.get(data.size() - 1);
+
+        return (previous.getWinterRain() + latest.getWinterRain()) / 2;
+    }
 }

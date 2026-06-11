@@ -17,4 +17,9 @@ public class FloodRiskController {
     public String getFloodRisk() {
         return floodRiskService.calculateLatestWinterRisk();
     }
+
+    @GetMapping("/flood-risk/prediction")
+    public double getWinterPrediction() {
+        return floodRiskService.predictNextWinterRainfall();
+    }
 }
