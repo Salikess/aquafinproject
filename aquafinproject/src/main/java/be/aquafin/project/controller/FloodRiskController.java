@@ -1,5 +1,6 @@
 package be.aquafin.project.controller;
-
+import be.aquafin.project.model.FloodRiskForecast;
+import java.util.List;
 import be.aquafin.project.service.FloodRiskService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,5 +22,9 @@ public class FloodRiskController {
     @GetMapping("/flood-risk/prediction")
     public double getWinterPrediction() {
         return floodRiskService.predictNextWinterRainfall();
+    }
+    @GetMapping("/flood-risk/forecast")
+    public List<FloodRiskForecast> getFiveYearForecast() {
+        return floodRiskService.predictNextFiveYears();
     }
 }

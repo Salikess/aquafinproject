@@ -1,5 +1,6 @@
 package be.aquafin.project.service;
-
+import be.aquafin.project.model.FloodRiskForecast;
+import java.util.ArrayList;
 import be.aquafin.project.model.RainfallData;
 import be.aquafin.project.repository.RainfallDataRepository;
 import org.springframework.stereotype.Service;
@@ -67,5 +68,39 @@ public class FloodRiskService {
         RainfallData latest = data.get(data.size() - 1);
 
         return (previous.getWinterRain() + latest.getWinterRain()) / 2;
+    }
+
+    public List<FloodRiskForecast> predictNextFiveYears() {
+
+        List<RainfallData> data = rainfallDataRepository.findAll();
+
+        List<FloodRiskForecast> forecasts = new ArrayList<>();
+
+        if (data.size() < 2) {
+            return forecasts;
+        }
+
+        RainfallData previous = data.get(data.size() - 2);
+        RainfallData latest = data.get(data.size() - 1);
+
+        double prediction =
+                (previous.getWinterRain() + latest.getWinterRain()) / 2;
+
+        int currentYear = latest.getYear();
+
+        for (int i = 1; i <= 5; i++) {
+
+            String risk = calculateWinterRisk(prediction);
+
+            forecasts.add(
+                    new FloodRiskForecast(
+                            currentYear + i,
+                            prediction,
+                            risk
+                    )
+            );
+        }
+
+        return forecasts;
     }
 }
